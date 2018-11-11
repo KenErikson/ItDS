@@ -1,3 +1,4 @@
+# coding=utf-8
 ## all imports
 from IPython.display import HTML
 import numpy as np
@@ -8,7 +9,6 @@ import operator
 import socket
 import cPickle
 import re # regular expressions
-import ast
 
 from pandas import Series
 import pandas as pd
@@ -99,16 +99,38 @@ hrefs_to_resturants = [u'/biz/sis-deli-ja-cafe-helsinki-2', u'/biz/la-torrefazio
 # Check each of the viable restaurants
 ##
 for href in hrefs_to_resturants:
+    print 'Testing ' +href
     url = BASE_URL + href
     source = urllib2.urlopen(url).read()
     root_restaurant_soup = bs4.BeautifulSoup(source, 'html.parser')
 
     # Check takes credit card
-    takes_credit_card = False
-    element = root_search_soup.find("div", {"class":"short-def-list"})
+    element = root_restaurant_soup.find("div", {"class":"short-def-list"})
     if element is not None:
-        attribute_element = element.find("dt")
-        print attribute_element
+        attribute_text = element.find("dt").text.strip()
+        if "Tar betalkort" not in attribute_text:
+            continue
 
     # Check open at least once during Saturday/Sunday
-    open_weekends = False
+    open_weekend = False
+    element = root_restaurant_soup.find("table",{"class":"hours-table"})
+    tbody = element.find("tbody")
+    for trow in tbody.findChildren("tr"):
+        #print trow.findChild("th").text
+        if u"lör" in trow.findChild("th").text or u"sön" in trow.findChild("th").text:
+            #print trow.findChild("th")
+            #print trow.findChild("td")
+            if len(trow.findChild("td").findChildren("span"))>0:
+                open_weekend = True
+                print "YES"
+                break
+
+    if not open_weekend:
+        print "Not open on weekends"
+        continue
+    print "Open on weekends"
+
+    #Get Distance
+    #Get Rating
+    #Get Review Count
+    #Get prices
