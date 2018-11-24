@@ -1,0 +1,24 @@
+import os
+import networkx as nx
+import re
+import matplotlib.pyplot as plt
+import matplotlib
+import math
+
+#print(os.listdir(os.getcwd()))
+graph = nx.Graph()
+with open('CE-LC.txt') as f:
+    for line in f:
+        lineArray = re.split(r'\t+', line.strip())
+        node1 = lineArray[0]
+        node2 = lineArray[1]
+        edgeWeight = lineArray[2]
+        graph.add_node( node1 )
+        graph.add_node( node2 )
+        graph.add_edge( node1, node2, weight=edgeWeight )
+        if 'str' in line:
+            break
+
+graph.nodes()
+GREEN = "#77DD77"
+nx.draw(graph, node_color=GREEN )
