@@ -13,12 +13,31 @@ with open('CE-LC.txt') as f:
         node1 = lineArray[0]
         node2 = lineArray[1]
         edgeWeight = lineArray[2]
-        graph.add_node( node1 )
-        graph.add_node( node2 )
-        graph.add_edge( node1, node2, weight=edgeWeight )
+        graph.add_node(node1)
+        graph.add_node(node2)
+        graph.add_edge(node1, node2, weight=edgeWeight)
         if 'str' in line:
             break
 
-graph.nodes()
+print(graph.nodes().__len__())
 GREEN = "#77DD77"
-nx.draw(graph, node_color=GREEN )
+options = {
+    'node_color': 'blue',
+    'node_size': 100,
+    'width': 3,
+    'arrowstyle': '-|>',
+    'arrowsize': 12,
+}
+nx.draw(graph, node_size=2)
+plt.show()
+numberOfNodes = len(graph.nodes())
+numberOfEdges = len(graph.edges())
+print("Number of nodes: "+ str(numberOfNodes))
+print("Number of edges: "+str(numberOfEdges))
+
+totalDegrees = 0
+for degree in graph.degree():
+    totalDegrees += degree[1]
+averageDegrees = totalDegrees/(numberOfNodes*1.0)
+print("Average degree of nodes: " +str(averageDegrees))
+print("Network density: "+str(nx.density(graph)))
