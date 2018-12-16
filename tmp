@@ -34,7 +34,7 @@ from tensorflow.python.keras._impl.keras.wrappers.scikit_learn import KerasRegre
 ###
 # Describe dataset
 ###
-print("The train input is a tuple of shape: "+str(x_train.shape))
+print("The train input is a touple of shape: "+str(x_train.shape))
 print("The train output is an array of length: "+str(len(y_train)))
 
 median_value_array = y_train
@@ -42,21 +42,22 @@ plt.title("Overview of mean value in dataset")
 plt.xlabel("Median value of Home (k$)")
 plt.ylabel("Nr of occurences in test data")
 plt.hist(median_value_array)
-plt.show()
+#plt.show()
 
 crim_rate = np.array(x_train[:,0])
+
 plt.title("Value/Crime Rate")
 plt.xlabel("Crime Rate (per town capita)")
 plt.ylabel("Median value of Home (k$)")
 plt.scatter(crim_rate,median_value_array,linestyle = 'None')
-plt.show()
+#plt.show()
 
 average_number_of_rooms = np.array(x_train[:,5])
 plt.title("Value/Number of rooms")
 plt.xlabel("Average number of rooms")
 plt.ylabel("Median value of Home (k$)")
 plt.scatter(average_number_of_rooms,median_value_array,linestyle = 'None')
-plt.show()
+#plt.show()
 
 ###
 # Initiate Model
@@ -65,6 +66,7 @@ model = keras.Sequential()
 model.add(keras.layers.Dense(9, activation=tf.nn.relu,kernel_initializer='normal', input_shape=(13,)))
 #model.add(keras.layers.Dropout(0.2)) # Not Overfitting data
 model.add(keras.layers.Dense(11, kernel_initializer='normal', activation=tf.nn.relu))
+#model.add(keras.layers.Dense(4, kernel_initializer='normal', activation='relu'))
 model.add(keras.layers.Dense(1, kernel_initializer='normal'))
 model.compile(optimizer=tf.train.AdamOptimizer(),
               loss='mean_squared_error')
@@ -80,5 +82,11 @@ model.fit(x_train, y_train, epochs=2000, verbose=0)
 # (get mean squared error of test data in k$)
 ###
 mean_squared_error = model.evaluate(x_test, y_test)
+#mean_squared_error = model.evaluate(x_train, y_train)
+#scores = model.evaluate(x_train, y_train)
 print("Mean squared error on test data: "+str(round(mean_squared_error,2))+"k$")
 print("Mean error on test data: "+str(round(sqrt(mean_squared_error),2))+"k$")
+
+
+#Mean squared error on test data: 25.81k$
+#Mean error on test data: 5.08k$
